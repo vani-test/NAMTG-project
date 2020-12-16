@@ -19,8 +19,8 @@ public class AdminApproval {
 	{
 		try {
 			driver.findElement(By.xpath("//span[text()=\"Patients \"]")).click();
-			driver.findElement(By.xpath("//input[@id=\"search\"]")).sendKeys(ssn);
-			driver.findElement(By.xpath("//input[@class='tfbutton']")).click();
+			driver.findElement(By.xpath("id=search")).sendKeys(ssn);
+			driver.findElement(By.xpath("class='tfbutton")).click();
 			driver.findElement(By.xpath("//tr/td[1]")).click();
 			driver.findElement(By.xpath("//a[contains(text(),'Joe')]")).click();
 			Thread.sleep(400);

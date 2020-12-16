@@ -1,24 +1,32 @@
 package org.iit.healthcare.mmp.pages;
 
-import org.iit.healthcare.mmp.baseclass.TestBaseClass;
+
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.Reporter;
 
 public class AdminRegistrationPage{
-	public WebDriver driver;
+	 WebDriver driver;
+	
 	//Registration page webelement declaration
 	@FindBy(xpath="//input[@value=\"Register\"]") private WebElement registerButton;
-	@FindBy(xpath="//input[@id=\"firstname\"]") private WebElement fnameTextBox;
-	@FindBy(xpath="//input[@id=\"lastname\"]") private WebElement lnameTextBox;
-	@FindBy(xpath="//input[@id=\"username\"]") private WebElement unameTextBox;
-	@FindBy(xpath="//input[@id=\"password\"]") private WebElement pwdTextBox;
-	@FindBy(xpath="//input[@id=\"cpassword\"]") private WebElement confirmpwdTextBox;
-	@FindBy(xpath="//input[@id=\"officecode\"]") private WebElement emailidTextBox;
-	@FindBy(xpath="//input[@name=\"save\"]") private WebElement saveButton;
+	
+	//@FindBy(id="firstname") private WebElement fnameTextBox;
+	
+	@FindBy(name="Name") private WebElement firstnameTextbox;
+	@FindBy(id="lastname") private WebElement lnameTextBox;
+	@FindBy(id="username") private WebElement unameTextBox;
+	@FindBy(id="password") private WebElement pwdTextBox;
+	@FindBy(id="cpassword") private WebElement confirmpwdTextBox;
+	@FindBy(id="officecode") private WebElement emailidTextBox;
+	@FindBy(name="save") private WebElement saveButton;
 
 	public AdminRegistrationPage(WebDriver driver)
 	{
@@ -29,28 +37,37 @@ public class AdminRegistrationPage{
 	public void registerButtonClick() {
 		registerButton.click();
 	}
-	public void enterFnameTextbox(String firstname) {
-		fnameTextBox.sendKeys("Final");
-	}
-	public void enterLnameTextbox(String lastname) {
-		lnameTextBox.sendKeys("Report");
-	}
-	public void enterUnameTextbox(String uname)
+	 
+	
+	public boolean validateAdminPortalMessage()
 	{
-		unameTextBox.sendKeys("FinalReport");
+		WebDriverWait wait= new WebDriverWait(driver,30);
+		Boolean result=wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//h1[contains(text(),'PERSONAL DETAILS')]"), "PERSONAL DETAILS"));
+		return result;
+	}		
+			
+	public void enterFnameTextbox(String afirstname) {
+		firstnameTextbox.sendKeys(afirstname);
 	}
-	public void pwdTextbox(String password)
-	{
-		pwdTextBox.sendKeys("Finaltest2020");
+	public void enterLnameTextbox(String alastname) {
+		lnameTextBox.sendKeys(alastname);
 	}
-	public void confirmPwdTextbox(String confirmpwd)
+	public void enterUnameTextbox(String auname)
 	{
-		confirmpwdTextBox.sendKeys("Finaltest2020");
+		unameTextBox.sendKeys(auname);
+	}
+	public void pwdTextbox(String apassword)
+	{
+		pwdTextBox.sendKeys(apassword);
+	}
+	public void confirmPwdTextbox(String aconfirmpwd)
+	{
+		confirmpwdTextBox.sendKeys(aconfirmpwd);
 	}
 
-	public void emailidTextbox(String emailid)
+	public void emailidTextbox(String aemailid)
 	{
-		emailidTextBox.sendKeys("finalcheckround@gmail.com");
+		emailidTextBox.sendKeys(aemailid);
 	}
 	public void saveButton()
 	{
@@ -62,16 +79,28 @@ public class AdminRegistrationPage{
 		Alert alert =driver.switchTo().alert(); 
 		alert.accept();
 		System.out.println("Admin alert popup step is passed");
+		
 	}
 
-	public void adminReglogin(String uname,String pword) throws InterruptedException
+	public void adminReglogin(String ausername,String apassword) throws InterruptedException
 	{
 		/*Admin credentials */
-		driver.findElement(By.id("username")).sendKeys(uname);
-		driver.findElement(By.id("password")).sendKeys(pword);
+		driver.findElement(By.id("username")).sendKeys(ausername);
+		driver.findElement(By.id("password")).sendKeys(apassword);
 		//type=submit and it is available in the html form
 		driver.findElement(By.name("admin")).click();
 		Thread.sleep(400);
+
+	}
+	
+	public void adminHomePageCheck() {
+
+		System.out.println(driver.getTitle());
+		/*validating home page title for successful login*/
+		String actual=driver.findElement(By.xpath("//ul/li[contains(text(),'HOME')]")).getText();
+		String expected="HOME";
+		Assert.assertEquals(actual, expected);
+		Reporter.log("Admin registration successful",true);
 
 	}
 }
